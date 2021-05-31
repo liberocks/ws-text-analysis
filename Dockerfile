@@ -4,23 +4,22 @@ FROM node:10-alpine
 RUN npm install -g pm2
 
 # Set working directory
-RUN mkdir -p /var/www/ws-text-analysis
-WORKDIR /var/www/ws-text-analysis
+RUN mkdir -p /var/www/nest-es
+WORKDIR /var/www/nest-es
 
 # add `/usr/src/app/node_modules/.bin` to $PATH
-ENV PATH /var/www/ws-text-analysis/node_modules/.bin:$PATH
+ENV PATH /var/www/nest-es/node_modules/.bin:$PATH
 # create user with no password
-RUN adduser --disabled-password demo
+RUN adduser --disabled-password user
 
 # Copy existing application directory contents
-COPY . /var/www/ws-text-analysis
+COPY . /var/www/nest-es
 # install and cache app dependencies
-COPY package.json /var/www/ws-text-analysis/package.json
-COPY package-lock.json /var/www/ws-text-analysis/package-lock.json
+COPY package.json package-lock.json* /var/www/nest-es/
 
 # grant a permission to the application
-RUN chown -R demo:demo /var/www/ws-text-analysis
-USER demo
+RUN chown -R user:user /var/www/nest-es
+USER user
 
 # clear application caching
 RUN npm cache clean --force
